@@ -12,8 +12,8 @@ import glob
 class ImagesDataset(Dataset):
 
     def __init__(self, photos_path, anime_path, transforms):
-        self.photos_path = photos_path
-        self.anime_path = anime_path
+        self.photos_path = Path(photos_path)
+        self.anime_path = Path(anime_path)
         self.transforms = transforms
         self.photos = os.listdir(photos_path)
         self.anime = os.listdir(anime_path)
@@ -25,10 +25,11 @@ class ImagesDataset(Dataset):
 
     def __getitem__(self, idx):
         photo = Image.open(
-            self.photos_path + self.photos[idx % self.l_photos]
+            (self.photos_path).joinpath(self.photos[idx % self.l_photos])
         ).convert('RGB')
         anime = Image.open(
                 self.anime_path + self.anime[idx % self.l_anime]
+                (self.anime_path).joinpath(self.anime[idx % self.l_anime])
         ).convert('RGB')
         photo = self.transforms(photo)
         anime = self.transforms(anime)
