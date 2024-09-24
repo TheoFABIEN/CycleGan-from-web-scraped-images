@@ -1,28 +1,30 @@
 import torch 
+import torch.optim as optim
 import torch.nn as nn
-from torch.nn import Dataloader
+from torch.utils.data import DataLoader
 from tqdm import tqdm 
 import matplotlib.pyplot as plt 
 from dataset_class import ImagesDataset
 from model import Generator, Discriminator
+from pathlib import Path
 from config import *
 
 
 # Instanciate dataset and dataloader
 dataset = ImagesDataset(
-        photos_path = '/Dataset/Photos',
-        anime_path = '/Dataset/Anime',
-        transforms = transforms
+        photos_path = 'D:\ML_Projects\CycleGan\Dataset\Photos',
+        anime_path = 'D:\ML_Projects\CycleGan\Dataset\Anime',
+        transforms = transform
 )
 
-dataloader = Dataloader(
+dataloader = DataLoader(
     dataset,
     batch_size = BATCH_SIZE,
     shuffle = True
 )
 
 
-L1_loss = nn.L1_loss()
+L1_loss = nn.L1Loss()
 mse_loss = nn.MSELoss()
 
 g_scaler = torch.cuda.amp.GradScaler()
@@ -31,8 +33,8 @@ d_scaler = torch.cuda.amp.GradScaler()
 #Creating model instances
 disc_photo = Discriminator(in_channels = 3).to(DEVICE)
 disc_anime = Discriminator(in_channels = 3).to(DEVICE)
-gen_anime = Generator(in_channels = 3, num_residuals = 9).to(DEVICE)
-gen_photo = Generator(in_channels = 3, num_residuals = 9).to(DEVICE)
+gen_anime = Generator(img_channels = 3, num_residuals = 9).to(DEVICE)
+gen_photo = Generator(img_channels = 3, num_residuals = 9).to(DEVICE)
 
 # Optimizers
 opt_disc = optim.Adam(
@@ -91,7 +93,7 @@ for epoch in range(NUM_EPOCHS):
         opt_disc.zero_grad()
         d_scaler.scale(disc_loss).backward()
         d_scaler.step(opt_disc)
-        d_scale.update()
+        d_scaler.update()
 
 
         #Train the generator now
@@ -123,7 +125,7 @@ for epoch in range(NUM_EPOCHS):
             id_photo_loss = L1_loss(photo, id_photo)
 
             # All losses together
-            gen_loss (
+            gen_loss = (
                     loss_gen_anime + loss_gen_photo +
                     cycle_anime_loss * LAMBDA_CYCLE + cycle_photo_loss * LAMBDA_CYCLE + 
                     id_anime_loss * LAMBDA_ID + id_photo_loss * LAMBDA_ID
@@ -142,11 +144,12 @@ for epoch in range(NUM_EPOCHS):
     )
 
 
+saved_models_path = Path('D:\ML_Projects\CycleGan\Saved_models')
 
-torch.save(disc_photo.state_dict(), '')
-torch.save(disc_anime.state_dict(), '')
-torch.save(disc_anime.state_dict(), '')
-torch.save(gen_photo.state_dict(), '')
+torch.save(disc_photo.state_dict(), saved_models_path)
+torch.save(disc_anime.state_dict(), saved_models_path)
+torch.save(disc_anime.state_dict(), saved_models_path)
+torch.save(gen_photo.state_dict(), saved_models_path)
 
 
 
