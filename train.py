@@ -144,14 +144,14 @@ for epoch in range(NUM_EPOCHS):
     )
 
 
-saved_models_path = Path('D:\ML_Projects\CycleGan\Saved_models')
+saved_models_path = str(Path('D:\ML_Projects\CycleGan\Saved_models'))
 
-torch.save(disc_photo.state_dict(), saved_models_path)
-torch.save(disc_anime.state_dict(), saved_models_path)
-torch.save(disc_anime.state_dict(), saved_models_path)
-torch.save(gen_photo.state_dict(), saved_models_path)
+torch.save(disc_photo.state_dict(), saved_models_path + '\disc_photo.pth')
+torch.save(disc_anime.state_dict(), saved_models_path + '\disc_anime.pth')
+torch.save(gen_anime.state_dict(), saved_models_path + '\gen_anime.pth')
+torch.save(gen_photo.state_dict(), saved_models_path + '\gen_photo.pth')
 
-
+print('Model saved to Saved_models directory.')
 
         
 
