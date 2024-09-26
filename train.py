@@ -36,6 +36,28 @@ disc_anime = Discriminator(in_channels = 3).to(DEVICE)
 gen_anime = Generator(img_channels = 3, num_residuals = 9).to(DEVICE)
 gen_photo = Generator(img_channels = 3, num_residuals = 9).to(DEVICE)
 
+# Load weights of precedent training session
+disc_photo.load_state_dict(
+        torch.load(
+            "D:\ML_Projects\CycleGan\Saved_models\disc_photo.pth"
+        )
+)
+gen_photo.load_state_dict(
+        torch.load(
+            "D:\ML_Projects\CycleGan\Saved_models\gen_photo.pth"
+        )
+)
+disc_anime.load_state_dict(
+        torch.load(
+            "D:\ML_Projects\CycleGan\Saved_models\disc_anime.pth"
+        )
+)
+gen_anime.load_state_dict(
+        torch.load(
+            "D:\ML_Projects\CycleGan\Saved_models\gen_anime.pth"
+        )
+)
+
 # Optimizers
 opt_disc = optim.Adam(
         list(disc_anime.parameters()) + list(disc_photo.parameters()),

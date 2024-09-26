@@ -17,14 +17,11 @@ gen_anime.load_state_dict(
         )
 )
 
-
-# Backtransformation of the results
-
-# TODO
-
 # Predict on test images 
 
-images_dir = "D:\ML_Projects\CycleGan\Dataset\Photos"
+images_dir = "D:\ML_Projects\CycleGan\Dataset\Test_photos"
+
+predictions_dir = "D:\ML_Projects\CycleGan\Predictions"
 
 images_list = [
         os.path.join(images_dir, img)
@@ -32,7 +29,8 @@ images_list = [
 ]
 
 
-_, ax = plt.subplots(5, 2, figsize = (12, 12))
+fig, ax = plt.subplots(5, 2, figsize = (6, 12))
+fig.tight_layout()
 
 for i in range(5):
 
@@ -44,21 +42,25 @@ for i in range(5):
     with torch.no_grad():
         predicted_image = gen_anime(original_image.unsqueeze(0).to(DEVICE))
 
-    # Save the predictions
+    # Save the predictions 
+    predicted_image = predicted_image.squeeze(0).permute(1, 2, 0).cpu() * .5 + .5
+    output_path = os.path.join(predictions_dir, f"{i}.jpg")
+    output_image = transforms.ToPILImage(mode = 'RGB')(predicted_image.permute(2, 0, 1))
+    output_image.save(output_path)
 
-    #TODO
-
-    # Plot 
+    # Plot and save
 
     ax[i, 0].imshow(original_image.permute(1, 2, 0) * .5 + .5)
-    ax[i, 1].imshow(predicted_image.squeeze(0).permute(1, 2, 0).cpu() * .5 + .5)
+    ax[i, 1].imshow(predicted_image)
 
-    ax[i, 0].set_title("Photo")
-    ax[i, 1].set_title("Fake anime")
+    ax[0, 0].set_title("Photo")
+    ax[0, 1].set_title("Fake anime")
     
     ax[i, 0].axis("off")
     ax[i, 1].axis("off") 
 
+plt.subplots_adjust(wspace = -0.2, hspace = 0.05, top = 0.95)
+plt.savefig(os.path.join(predictions_dir, "general_plot.jpg"))
 plt.show()
 
 
