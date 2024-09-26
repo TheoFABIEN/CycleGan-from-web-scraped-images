@@ -9,7 +9,7 @@ They have a wide range of applications, such as enhancing the resolution of imag
 These fascinating properties made me want to build my own CycleGAN project. 
 
 Makoto Shinkai's animated movies have a unique an beautiful aesthetic. I was inspired to capture this beautiful style and apply it to real-world photos. 
-At the intersection of technical applications and artistic expression, this project is was an opportunity experiment with visual content in the realm of Japanese animation. 
+At the intersection of technical applications and artistic expression, this project was an opportunity to experiment with visual content in the realm of Japanese animation. 
 
 ### Data acquisition 
 
