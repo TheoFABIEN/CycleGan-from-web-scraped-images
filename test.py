@@ -5,7 +5,6 @@ from model import Generator
 import torchvision.transforms as transforms
 from config import DEVICE, transform
 import matplotlib.pyplot as plt
-import random
 from PIL import Image
 
 # Create model instance 
@@ -25,16 +24,16 @@ predictions_dir = "D:\ML_Projects\CycleGan\Predictions"
 
 images_list = [
         os.path.join(images_dir, img)
-        for img in random.sample(os.listdir(images_dir), 5)
+        for img in os.listdir(images_dir)
 ]
 
 
-fig, ax = plt.subplots(5, 2, figsize = (6, 12))
+fig, ax = plt.subplots(6, 2, figsize = (6, 15))
 fig.tight_layout()
 
-for i in range(5):
+for i, image_path in enumerate(images_list):
 
-    original_image = Image.open(images_list[i]).convert('RGB')
+    original_image = Image.open(image_path).convert('RGB')
     # Apply transformations
     original_image = transform(original_image)
     # Predict with the trained model
@@ -54,7 +53,7 @@ for i in range(5):
     ax[i, 1].imshow(predicted_image)
 
     ax[0, 0].set_title("Photo")
-    ax[0, 1].set_title("Fake anime")
+    ax[0, 1].set_title("Anime style")
     
     ax[i, 0].axis("off")
     ax[i, 1].axis("off") 
