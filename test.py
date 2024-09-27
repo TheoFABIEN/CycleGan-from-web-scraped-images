@@ -28,7 +28,7 @@ images_list = [
 ]
 
 
-fig, ax = plt.subplots(6, 2, figsize = (6, 15))
+fig, ax = plt.subplots(7, 2, figsize = (6, 16))
 fig.tight_layout()
 
 for i, image_path in enumerate(images_list):

@@ -12,7 +12,7 @@ transform = transforms.Compose([
 # Hyperparameters
 BATCH_SIZE = 4
 LR = 2e-4
-NUM_EPOCHS = 100 
+NUM_EPOCHS = 120
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 LAMBDA_CYCLE = 10
-LAMBDA_ID = 5
+LAMBDA_ID = 2
