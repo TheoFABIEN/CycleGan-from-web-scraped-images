@@ -20,5 +20,6 @@ The dataset was obtained from Google Images. It was cleaned manually to remove i
 I was able to obtain good results, especially after fine-tuning the LAMBDA_ID parameter, which controls the relative importance of identity loss. 
 This is important because it prevents excessive modifications of the image. In my case, setting it to 0 at first led to poor color restitution. 
 
-![general_plot](https://github.com/user-attachments/assets/dd3753cb-3e20-483e-a60e-9081946b7d96)
+
+![general_plot](https://github.com/user-attachments/assets/445974c7-a9df-401f-bf87-9a7ec0db6739)
 
