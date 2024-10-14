@@ -1,19 +1,23 @@
 import torch 
 import torch.nn as nn
-from tqdm import tqdm
-import matplotlib.pyplot as plt 
-
 from config import *
 
 
 
-
-# Generator model 
-
-
-
 class ConvBlock(nn.Module):
-    
+    """
+    Convolutional block used in both the generator and the discriminator.
+
+    Parameters:
+        in_channels (int): Number of input channels.
+        out_channels(int): Number of output channels.
+        down (bool, optional): If True (default), applies standard convolution. 
+                               If False, applies transpose convolution.
+        use_act (bool, optional): If True (default), adds ReLU activation.
+                                  If False, skips activation.
+        **kwargs: additional arguments to pass to the convolution layer.
+    """
+
     def __init__(self, in_channels, out_channels, down = True, use_act = True, **kwargs):
         super().__init__()
         self.conv = nn.Sequential(
@@ -28,7 +32,14 @@ class ConvBlock(nn.Module):
 
     
 class ResidualBlock(nn.Module):
-    
+    """
+    Residual block that adds the output of two convolutional layers to the 
+    original input.
+
+    Parameters:
+        channels (int): Number of input and output channels.
+    """
+
     def __init__(self, channels):
         super().__init__()
         self.block = nn.Sequential(
@@ -41,7 +52,17 @@ class ResidualBlock(nn.Module):
 
     
 class Generator(nn.Module):
-    
+    """
+    Generator architecture use in the CycleGAN.
+
+    Parameters:
+        img_channels (int, optional): Number of input channels (defaults to 3).
+        num_features (int, optional): Number of features in the convolutional
+                                      layer (defaults to  64).
+        num_residuals (int, optional): Number of residual blocks to use in the 
+                                       network (default to 9).
+    """
+
     def __init__(self, img_channels = 3, num_features = 64, num_residuals = 9):
         super().__init__()
         self.initial = nn.Sequential(
@@ -68,11 +89,11 @@ class Generator(nn.Module):
         self.up_blocks = nn.ModuleList(
             [
                 ConvBlock(
-                    num_features*4, num_features*2, down = False, kernel_size = 3, stride = 2, 
-                    padding = 1, output_padding = 1
+                    num_features*4, num_features*2, down = False, kernel_size = 3, stride = 2,
+                    adding = 1, output_padding = 1
                 ),
                 ConvBlock(
-                    num_features*2, num_features, down = False, kernel_size = 3, stride = 2, 
+                    num_features*2, num_features, down = False, kernel_size = 3, stride = 2,
                     padding = 1, output_padding = 1
                 ),
             ]   
@@ -93,11 +114,17 @@ class Generator(nn.Module):
 
 
 
-# Discriminator model 
-
-
 
 class Block(nn.Module):
+    """
+    Convolutional block used in the discriminator model.
+
+    Parameters:
+        in_channels (int): Number of input channels.
+        out_channels (int): Number of ouptut channels.
+        stride (int): Stride parameter for the convolution.
+    """
+
     def __init__(self, in_channels, out_channels, stride):
         super().__init__()
         self.conv = nn.Sequential(
@@ -114,6 +141,16 @@ class Block(nn.Module):
 
     
 class Discriminator(nn.Module):
+    """
+    Discriminator architecture used in the CycleGAN.
+
+    Parameters:
+        in_channels (int, optional): Number of input channels (defaults to 3).
+        features (list of int, optional): List of feature dimensions for each 
+                                          convolutional block (default is 
+                                          [64, 128, 256, 512]).
+    """
+
     def __init__(self, in_channels = 3, features = [64, 128, 256, 512]):
         super().__init__()
         self.initial = nn.Sequential(
